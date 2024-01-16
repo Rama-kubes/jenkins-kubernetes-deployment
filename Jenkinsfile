@@ -11,19 +11,19 @@ pipeline {
       }
     }
     stage('Build image') {
-      steps{
+      steps {
         script {
-          dockerImage = docker.build dockerimagename
+          dockerImage = docker.build(dockerimagename)
         }
       }
     }
     stage('Pushing Image') {
       environment {
-          registryCredential = 'dockerhub-credentials'
-           }
-      steps{
+        registryCredential = 'dockerhub-credentials'
+      }
+      steps {
         script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+          docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
             dockerImage.push("latest")
           }
         }
@@ -33,7 +33,7 @@ pipeline {
       steps {
         script {
           kubernetesDeploy(configs: "deployment.yaml", 
-                                         "service.yaml")
+                           configs: "service.yaml")
         }
       }
     }
